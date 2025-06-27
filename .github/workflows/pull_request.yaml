@@ -1,0 +1,51 @@
+name: Run Test on Pull Request
+
+on:
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Run Robot Framework Tests on PR
+    runs-on: ubuntu-latest
+    environment: staging
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.10"
+
+    - name: Cache pip dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.*') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Run Robot Framework tests
+      run: |
+        robot --outputdir results -v BROWSER:headlessChrome tests/
+
+    - name: Upload Robot Framework reports
+      uses: actions/upload-artifact@v4
+      with:
+        name: robot-reports
+        path: results/
+
+    - name: Clear Browser Cache
+      run: |
+        rm -rf ~/.cache/chromium  
+        rm -rf ~/.cache/google-chrome
