@@ -1,0 +1,13 @@
+jsonpath==0.82
+python-dotenv==1.0.0
+requests==2.32.2
+robotframework==7.1.1
+robotframework-pythonlibcore==4.4.1
+robotframework-seleniumlibrary==6.6.1
+selenium==4.26.1
+webdriver-manager==4.0.2
+webdrivermanager==0.10.0
+robotframework-notifications
+robotframework-robocop==2.6.0
+robotframework-tidy==4.14.0
+faker==18.10.1
